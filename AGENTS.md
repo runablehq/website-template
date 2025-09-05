@@ -4,7 +4,35 @@ AGENTS.md
 
 This repo is the base site template for user projects.
 It uses React + Vite + TailwindCSS + shadcn/ui. Bun is used only as a package manager.
-Agents should extend this starter by adding blocks (reusable UI components) that can be composed into pages for the user website. If a block doesn't exist, it maybe be created using shadcn/ui and TailwindCSS.
+Agents should extend this starter by adding reusable UI blocks in `src/blocks/` and composing them into pages under `src/pages/`. Puck has been removed from this template.
+
+## 🤖 Agent Priorities
+
+**CRITICAL**: Agents must follow this priority order when implementing features:
+
+### 1. 🧱 Reusable Blocks First
+- PREFER: Add or extend blocks in `src/blocks/` using shadcn/ui + Tailwind
+- AVOID: Page-specific, one-off components
+- WHY: Blocks are composable, testable, and reusable across pages
+
+### 2. 🧩 Compose Pages from Blocks
+- PREFER: Keep pages in `src/pages/` minimal and declarative
+- PASS DATA: via simple, serializable props (strings, numbers, booleans)
+- WHY: Keeps logic inside reusable primitives, pages stay thin
+
+### 3. 📝 Implementation Strategy
+When asked to add features:
+1. Check if an existing block can be configured to achieve it
+2. If not, create a new block in `src/blocks/`
+3. Wire the block into the relevant page(s)
+4. Keep styling consistent with Tailwind utilities
+
+### 4. 🚫 What NOT to do
+- Don't create page-specific components
+- Don't add stateful, complex logic in pages
+- Don't introduce configuration systems or visual editors
+
+⸻
 
 1. Use shadcn/ui for UI primitives.
 2. Style using Tailwind classes (bg-accent, text-muted-foreground).
@@ -17,14 +45,14 @@ Agents should extend this starter by adding blocks (reusable UI components) that
 • src/components/ui/ → shadcn/ui components (Button, Card, Input, etc).
 • src/blocks/ → Prebuilt primitives (Hero, Navbar, Footer, Sections).
 • src/pages/ → Example pages built with blocks.
-• src/lib/ → Helpers and utils (schema renderer, etc).
+• src/lib/ → Helpers and utils.
 • src/assets/ → Static assets (images, svgs, fonts). Use alias `@assets/*`.
 • src/constants.ts → Basic website configurations.
 
 
 ⸻
 
-🧱 Adding a New Block 1. Create file in src/blocks/:
+🧱 Adding a New Block 1. Create file in `src/blocks/`:
 
 type BlockProps = { ... }
 
@@ -56,9 +84,9 @@ return (
 • Build production: bun run build (Vite)
 • Preview build: bun run preview
 • Deploy: bun run deploy
-• Add UI components: bunx shadcn@latest add <component>
-• Create new blocks under src/blocks/
-• Test changes in src/App.tsx
+• Add UI components: `bunx shadcn@latest add <component>`
+• Create new blocks under `src/blocks/`
+• Compose blocks in `src/pages/`
 
 ⸻
 
@@ -66,13 +94,13 @@ return (
 
 • Create pages in `src/pages/` (already scaffolded with `Home` and `About`).
 
-- `src/pages/Home.tsx` and `src/pages/About.tsx` are minimal examples.
+- `src/pages/Home.tsx` and `src/pages/About.tsx` are minimal examples composed from blocks.
 - Keep pages pure and pass data via props.
 
 • Route wiring lives in `src/App.tsx` using React Router.
 
-- Add a page: create `src/pages/YourPage.tsx`, then add a `<Route>` and a `<Link>` in `App.tsx`.
-- Keep navigation simple and composable (e.g., a `Navbar` block).
+- Add a page: create `src/pages/YourPage.tsx`, then add a `<Route>` and a link in the `Navbar` block.
+- Keep navigation simple and composable (e.g., use the `Navbar` block).
 
 • Note: This template is SPA-only; additional HTML entrypoints (MPA) are not used here.
 
@@ -108,12 +136,13 @@ return (
 
 ⸻
 
-📦 Migrations (D1 SQL)
+📦 Migrations (Drizzle + D1)
 
-• On first request, `worker/index.ts` calls `runMigrations(env)`.
-• Edit `worker/db/index.ts` → `runMigrations` to add new entries to the `migrations` array (versioned SQL and optional seed).
-• Schema version tracked in `__schema_migrations` table.
-• The base migration creates a `users` table and a demo `admin` user.
+• Define schema in `worker/db/schema.ts`.
+• Generate migrations: `bunx drizzle-kit generate --config ./drizzle.config.ts`
+• Apply migrations: `bunx drizzle-kit migrate --config ./drizzle.config.ts`
+• Config file: `drizzle.config.ts` (uses D1 binding `D1` from `wrangler.jsonc`).
+• Note: In-app SQL migration logic has been removed; use Drizzle Kit for all schema changes.
 
 ⸻
 

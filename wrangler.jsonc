@@ -8,8 +8,8 @@
   "main": "worker/index.ts",
   "compatibility_date": "2025-08-23",
   "assets": {
-	"directory": "./src/assets/",
-	"binding": "ASSETS",
+    "directory": "dist/client",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application"
   },
   "observability": {

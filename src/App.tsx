@@ -15,12 +15,14 @@ export function App() {
           { to: "/about", label: "About" },
         ]}
       />
+
       <main className="flex-1 container mx-auto p-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
+
       <Footer
         brand={SITE_NAME}
         links={[

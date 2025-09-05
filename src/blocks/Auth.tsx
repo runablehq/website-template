@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "../AuthContext";
 
 export function Auth() {
+  const { login } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +25,9 @@ export function Auth() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Request failed");
       setMessage(mode === "signup" ? "Account created. You can log in now." : "Logged in.");
+      if (mode === "login") {
+        login();
+      }
     } catch (err: any) {
       setMessage(err.message || "Something went wrong");
     }
