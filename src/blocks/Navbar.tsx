@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 type NavbarLink = {
@@ -75,6 +76,7 @@ export function Navbar({ brand = "Brand", links = [], className }: NavbarProps) 
               <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">Sign up</Link>
             </>
           )}
+          <ThemeToggle compact />
         </nav>
 
         {/* Mobile hamburger */}
@@ -118,6 +120,9 @@ export function Navbar({ brand = "Brand", links = [], className }: NavbarProps) 
                   <Link to="/" onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors">Sign up</Link>
                 </div>
               )}
+              <div className="mt-3">
+                <ThemeToggle />
+              </div>
             </div>
           </nav>
         </div>
@@ -125,5 +130,4 @@ export function Navbar({ brand = "Brand", links = [], className }: NavbarProps) 
     </header>
   );
 }
-
 

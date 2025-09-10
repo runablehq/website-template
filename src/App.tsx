@@ -3,7 +3,6 @@ import { SITE_NAME } from "@/constants";
 import About from "@/pages/About";
 import Home from "@/pages/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./index.css";
 
 export function App() {
   return (

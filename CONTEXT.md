@@ -9,6 +9,7 @@ This repo is the base site template for user projects using:
 Agents should extend this starter by:
 1. Adding reusable UI blocks in `src/blocks/`
 2. Composing them into pages under `src/pages/`
+3. Using semantic design tokens for styling (no hard-coded colors)
 
 **IMPORTANT**: ALWAYS run `bun run pre-deploy` before calling deploy tool.
 
@@ -28,22 +29,26 @@ Agents should extend this starter by:
 1. Check if existing block can be configured
 2. If not, create new block in `src/blocks/`
 3. Wire block into relevant page(s)
-4. Use consistent Tailwind styling
+4. Use consistent Tailwind styling with semantic tokens
 
 ### 4. 🚫 What NOT to do
 - Don't create page-specific components
 - Don't add complex logic in pages
 - Don't introduce config systems/editors
+- Don't use `dark:` variants or hard-coded colors; use tokens
 
 ## 📂 Project Structure
 
 ```
 src/
 ├── components/ui/     → shadcn/ui components
+├── components/        → App-level components (e.g., ThemeToggle)
 ├── blocks/            → Reusable UI primitives
 ├── pages/             → Pages composed from blocks
 ├── lib/               → Helpers and utilities
 ├── assets/            → Static assets (@assets/*)
+├── styles/            → Global styles and theme tokens
+├── theme/             → ThemeProvider + hooks
 └── constants.ts       → Website configurations
 
 worker/
@@ -86,6 +91,9 @@ bun run dev           # Start dev server
 bun run preview       # Preview production build
 bun run pre-deploy    # Generate migrations (REQUIRED before deploy)
 bun x shadcn@latest add <component>  # Add UI components
+
+# Theming docs
+# See THEMING.md for adding/editing themes and tokens
 ```
 
 ## 🧭 Pages & Routing (SPA)
@@ -111,6 +119,23 @@ To add a page:
 - Schema-first with serializable props
 - Consistent shadcn/ui + Tailwind styling
 - Minimal state in components
+- Semantic tokens only: use `bg-background`, `text-foreground`, `text-muted-foreground`,
+  `bg-card`, `border-input`, `bg-primary`, `text-primary-foreground`, `bg-accent`, etc.
+  Avoid literal color utilities (e.g., `text-slate-500`) and `dark:`.
+
+## 🎨 Theming & Design Tokens
+
+- Tokens live in `src/styles/themes.css`. Themes are applied via `data-theme` on `<html>`.
+- Tailwind color tokens map to CSS variables in `src/index.css` using `@theme inline`.
+- At runtime, `src/theme/ThemeProvider.tsx` sets `data-theme` and persists the choice.
+- `index.html` sets `data-theme` early to avoid FOUC.
+- Use `ThemeToggle` (`src/components/ThemeToggle.tsx`) to switch themes.
+
+Add a new theme
+
+1. Copy a theme block in `src/styles/themes.css` and rename the selector to `[data-theme="my-theme"]`.
+2. Adjust semantic variables (`--primary`, `--accent`, `--background`, etc.).
+3. Select via `useTheme().setTheme('my-theme')` or the ThemeToggle.
 
 ## 🔌 API Endpoints (Hono in `worker/`)
 
