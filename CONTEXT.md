@@ -137,12 +137,12 @@ return (
 ⸻
 
 📦 Migrations (Drizzle + D1)
-
+[IMPORTANT] Migration flow:
 • Define schema in `worker/db/schema.ts`.
-• Generate migrations: `bunx drizzle-kit generate --config ./drizzle.config.ts`
-• Apply migrations: `bunx drizzle-kit migrate --config ./drizzle.config.ts`
-• Config file: `drizzle.config.ts` (uses D1 binding `D1` from `wrangler.jsonc`).
-• Note: In-app SQL migration logic has been removed; use Drizzle Kit for all schema changes.
+• pre-deploy script will generate and stage the migrations.
+• calling deploy script will apply the migrations.
+
+When migrations fail, deploy tool will throw an error, in which case you are to drop the migration and follow the migration flow steps again.
 
 ⸻
 

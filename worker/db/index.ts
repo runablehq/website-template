@@ -1,47 +1,72 @@
 // D1-backed primitives using Drizzle ORM
-import { drizzle } from "drizzle-orm/d1";
 import { and, desc, eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/d1";
 import { pageConfigs, users } from "./schema";
 
 type JsonValue = any;
 
-export type RegisterPayload = { username: string; password: string; profile?: JsonValue };
+export type RegisterPayload = {
+  username: string;
+  password: string;
+  profile?: JsonValue;
+};
 export type VerifyPayload = { username: string; password: string };
 
-async function hashPassword(password: string, salt: Uint8Array): Promise<string> {
+async function hashPassword(
+  password: string,
+  salt: Uint8Array
+): Promise<string> {
   const enc = new TextEncoder();
   const data = new Uint8Array(salt.length + enc.encode(password).length);
   data.set(salt, 0);
   data.set(enc.encode(password), salt.length);
   const digest = await crypto.subtle.digest("SHA-256", data);
   const bytes = new Uint8Array(digest);
-  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 // Migrations are handled externally via Drizzle Kit. Remove in-app migration logic.
 
 export async function registerUser(env: Env, payload: RegisterPayload) {
-  const db = drizzle((env as any).D1 as D1Database);
-  const exists = await db.select({ id: users.id }).from(users).where(eq(users.username, payload.username)).limit(1);
-  if (exists.length > 0) return { ok: false, error: "Username taken" };
-  const id = crypto.randomUUID();
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const passwordHash = await hashPassword(payload.password, salt);
-  await db.insert(users).values({
-    id,
-    username: payload.username,
-    passwordHash,
-    salt: salt as unknown as ArrayBuffer,
-    profile: JSON.stringify(payload.profile ?? {}),
-    createdAt: Date.now(),
-  });
-  return { ok: true, id };
+  try {
+    const db = drizzle((env as any).D1 as D1Database);
+    const exists = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.username, payload.username))
+      .limit(1);
+    if (exists.length > 0) return { ok: false, error: "Username taken" };
+    const id = crypto.randomUUID();
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const passwordHash = await hashPassword(payload.password, salt);
+    await db.insert(users).values({
+      id,
+      username: payload.username,
+      passwordHash,
+      salt: salt as unknown as ArrayBuffer,
+      profile: JSON.stringify(payload.profile ?? {}),
+      createdAt: Date.now(),
+    });
+    return { ok: true, id };
+  } catch (error) {
+    console.error("Error registering user:", error as Error);
+    return {
+      ok: false,
+      error: "Failed to register user, error: " + (error as Error).message,
+    };
+  }
 }
 
 export async function verifyCredentials(env: Env, payload: VerifyPayload) {
   const db = drizzle((env as any).D1 as D1Database);
   const rows = await db
-    .select({ id: users.id, passwordHash: users.passwordHash, salt: users.salt })
+    .select({
+      id: users.id,
+      passwordHash: users.passwordHash,
+      salt: users.salt,
+    })
     .from(users)
     .where(eq(users.username, payload.username))
     .limit(1);
@@ -56,7 +81,12 @@ export async function verifyCredentials(env: Env, payload: VerifyPayload) {
 export async function getUserById(env: Env, id: string) {
   const db = drizzle((env as any).D1 as D1Database);
   const rows = await db
-    .select({ id: users.id, username: users.username, profile: users.profile, createdAt: users.createdAt })
+    .select({
+      id: users.id,
+      username: users.username,
+      profile: users.profile,
+      createdAt: users.createdAt,
+    })
     .from(users)
     .where(eq(users.id, id))
     .limit(1);
@@ -73,7 +103,11 @@ export type PageConfigData = {
   metadata?: any;
 };
 
-export async function savePageConfig(env: Env, userId: string, data: PageConfigData) {
+export async function savePageConfig(
+  env: Env,
+  userId: string,
+  data: PageConfigData
+) {
   const db = drizzle((env as any).D1 as D1Database);
   const id = crypto.randomUUID();
   const now = Date.now();
@@ -109,7 +143,11 @@ export async function savePageConfig(env: Env, userId: string, data: PageConfigD
   }
 }
 
-export async function getPageConfig(env: Env, userId: string, pageName: string) {
+export async function getPageConfig(
+  env: Env,
+  userId: string,
+  pageName: string
+) {
   const db = drizzle((env as any).D1 as D1Database);
 
   try {
@@ -122,7 +160,9 @@ export async function getPageConfig(env: Env, userId: string, pageName: string) 
         updatedAt: pageConfigs.updatedAt,
       })
       .from(pageConfigs)
-      .where(and(eq(pageConfigs.pageName, pageName), eq(pageConfigs.userId, userId)))
+      .where(
+        and(eq(pageConfigs.pageName, pageName), eq(pageConfigs.userId, userId))
+      )
       .orderBy(desc(pageConfigs.updatedAt))
       .limit(1);
 
@@ -158,7 +198,12 @@ export async function getPublishedPageConfig(env: Env, pageName: string) {
         updatedAt: pageConfigs.updatedAt,
       })
       .from(pageConfigs)
-      .where(and(eq(pageConfigs.pageName, pageName), eq(pageConfigs.isPublished, true)))
+      .where(
+        and(
+          eq(pageConfigs.pageName, pageName),
+          eq(pageConfigs.isPublished, true)
+        )
+      )
       .orderBy(desc(pageConfigs.updatedAt))
       .limit(1);
 
