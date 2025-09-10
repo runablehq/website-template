@@ -5,9 +5,6 @@ import { sign, verify } from "hono/jwt";
 
 const app = new Hono();
 
-// Migrations are handled via Drizzle Kit CLI.
-// See scripts: `bunx drizzle-kit generate` and `bunx drizzle-kit migrate`.
-
 app.get("/api/hello", c => c.json({ message: "Hello from Hono" }));
 
 app.get("/api/hello/:name", c => {

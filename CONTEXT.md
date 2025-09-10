@@ -81,10 +81,9 @@ return (
 🛠️ Development Workflow
 • Install deps: bun install
 • Run dev server: bun run dev (Vite)
-• Build production: bun run build (Vite)
 • Preview build: bun run preview
-• Deploy: bun run deploy
-• Add UI components: `bunx shadcn@latest add <component>`
+• Pre-deploy: bun run pre-deploy (use deploy tool after running pre-deploy) [IMPORTANT]
+• Add UI components: `bun x shadcn@latest add <component>`
 • Create new blocks under `src/blocks/`
 • Compose blocks in `src/pages/`
 
