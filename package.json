@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "pre-deploy": "bun run build && bun run db:generate",
     "cf-typegen": "wrangler types",
-    "db:generate": "bunx drizzle-kit generate --config ./drizzle.config.ts",
+    "db:generate": "bun x drizzle-kit generate --config ./drizzle.config.ts",
     "zip:dist": "tsx scripts/package-dist.ts"
   },
   "dependencies": {
