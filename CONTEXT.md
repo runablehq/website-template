@@ -15,9 +15,15 @@ Agents should extend this starter by:
 
 ## 🤖 Agent Priorities
 
+### 0. 📝 Implementation Strategy
+- **THIS TEMPLATE IS JUST BOILERPLATE** - completely revamp the design to match user requirements
+- **DO NOT preserve the template look** - create something unique that doesn't resemble the starter
+- Use semantic design tokens for all styling (no hard-coded colors)
+- Feel free to modify any aspect: pages, navigation, blocks, layouts, themes, etc.
+
 ### 1. 🧱 Reusable Blocks First
 - PREFER: Add/extend blocks in `src/blocks/` using shadcn/ui + Tailwind
-- AVOID: Page-specific components
+- AVOID: Page-specific components unless they're small
 - WHY: Blocks are composable, testable, reusable
 
 ### 2. 🧩 Compose Pages from Blocks
@@ -32,8 +38,6 @@ Agents should extend this starter by:
 4. Use consistent Tailwind styling with semantic tokens
 
 ### 4. 🚫 What NOT to do
-- Don't create page-specific components
-- Don't add complex logic in pages
 - Don't introduce config systems/editors
 - Don't use `dark:` variants or hard-coded colors; use tokens
 
