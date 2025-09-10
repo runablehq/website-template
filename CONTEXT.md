@@ -91,6 +91,9 @@ bun run dev           # Start dev server
 bun run preview       # Preview production build
 bun run pre-deploy    # Generate migrations (REQUIRED before deploy)
 bun x shadcn@latest add <component>  # Add UI components
+bun x tsc --noEmit -p ./tsconfig.app.json # Typecheck app
+bun x tsc --noEmit -p ./tsconfig.worker.json # Typecheck worker
+bun x tsc --noEmit -p ./tsconfig.node.json # Typecheck node
 
 # Theming docs
 # See THEMING.md for adding/editing themes and tokens
