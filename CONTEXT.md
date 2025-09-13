@@ -19,9 +19,16 @@ Before doing anything else, you MUST rewrite the placeholder pages:
 
 These files are ONLY placeholders to help boot the app. Do not keep their content or styling. Replace them with your own design and content before building additional blocks or pages.
 
-Additionally, review and adapt the theme tokens in `src/styles/themes.css` to match the specific project/brand requirements early in the process.
+**IMPORTANT**: Default to PREVIEW, not deploy. Use `bun run preview` for validation. Only deploy when explicitly requested/approved. When deploying, ALWAYS run `bun run pre-deploy` first (to generate migrations), then proceed with deploy after review.
 
-**IMPORTANT**: ALWAYS run `bun run pre-deploy` before calling deploy tool.
+## 🚀 Deployment Policy
+
+- By default, do NOT deploy. Use preview builds locally and in PRs.
+- Deployment is opt-in and requires explicit approval and environment readiness.
+- Preconditions for deploy
+  - `bun run pre-deploy` has generated migrations and they are reviewed.
+  - Environment variables and bindings (e.g., D1) are configured.
+  - Rollback plan is identified for schema changes.
 
 ## 🤖 Agent Priorities
 
@@ -104,8 +111,9 @@ export function BlockName({ title, subtitle, cta }: BlockProps) {
 ```bash
 bun install           # Install dependencies
 bun run dev           # Start dev server
-bun run preview       # Preview production build
-bun run pre-deploy    # Generate migrations (REQUIRED before deploy)
+# Default path: preview changes; do NOT deploy unless explicitly approved
+bun run preview       # Preview production build (default), use bash with session, and system tool to expose the preview port
+bun run pre-deploy    # Generate migrations (REQUIRED only before a deploy)
 bun x shadcn@latest add <component>  # Add UI components
 bun x tsc --noEmit -p ./tsconfig.app.json # Typecheck app
 bun x tsc --noEmit -p ./tsconfig.worker.json # Typecheck worker
@@ -184,7 +192,7 @@ Database:
 Process:
 1. Define schema in `worker/db/schema.ts`
 2. Run `bun run pre-deploy` (generates migrations)
-3. Call deploy tool (applies migrations)
+3. Call deploy tool only with explicit approval (applies migrations). Otherwise, stop at preview and do not deploy.
 
 Error handling:
 - If migrations fail, drop migration and repeat process
