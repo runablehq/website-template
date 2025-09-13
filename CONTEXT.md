@@ -11,12 +11,20 @@ Agents should extend this starter by:
 2. Composing them into pages under `src/pages/`
 3. Using semantic design tokens for styling (no hard-coded colors)
 
+## 🚩 Mandatory First Step
+
+Before doing anything else, you MUST rewrite the placeholder pages:
+- `src/pages/Home.tsx`
+- `src/pages/About.tsx`
+
+These files are ONLY placeholders to help boot the app. Do not keep their content or styling. Replace them with your own design and content before building additional blocks or pages.
+
 **IMPORTANT**: ALWAYS run `bun run pre-deploy` before calling deploy tool.
 
 ## 🤖 Agent Priorities
 
 ### 0. 📝 Implementation Strategy
-- **THIS TEMPLATE IS JUST BOILERPLATE** - completely revamp the design to match user requirements
+- **THIS TEMPLATE IS JUST BOILERPLATE** - completely revamp the design to match user requirements. **MUST REWRITE `Home.tsx` and `About.tsx` BEFORE building anything else.**
 - **DO NOT preserve the template look** - create something unique that doesn't resemble the starter
 - Use semantic design tokens for all styling (no hard-coded colors)
 - Feel free to modify any aspect: pages, navigation, blocks, layouts, themes, etc.
@@ -27,7 +35,8 @@ Agents should extend this starter by:
 - WHY: Blocks are composable, testable, reusable
 
 ### 2. 🧩 Compose Pages from Blocks
-- PREFER: Keep pages in `src/pages/` minimal
+- PREFER: Keep pages in `src/pages/` minimal.
+- First step: **Replace `src/pages/Home.tsx` and `src/pages/About.tsx` with your own versions**.
 - PASS DATA: via serializable props (strings, numbers, booleans)
 - WHY: Logic stays in reusable primitives
 
@@ -108,6 +117,8 @@ bun x tsc --noEmit -p ./tsconfig.node.json # Typecheck node
 - Pages: `src/pages/Home.tsx`, `src/pages/About.tsx`
 - Routing: `src/App.tsx` (React Router)
 - Navigation: Use `Navbar` block
+
+> WARNING: `Home.tsx` and `About.tsx` are placeholders intended only to demonstrate routing and layout. **You must rewrite both files before adding new routes, blocks, or features.**
 
 To add a page:
 1. Create `src/pages/YourPage.tsx`
