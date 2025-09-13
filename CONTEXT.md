@@ -19,6 +19,8 @@ Before doing anything else, you MUST rewrite the placeholder pages:
 
 These files are ONLY placeholders to help boot the app. Do not keep their content or styling. Replace them with your own design and content before building additional blocks or pages.
 
+Additionally, review and adapt the theme tokens in `src/styles/themes.css` to match the specific project/brand requirements early in the process.
+
 **IMPORTANT**: ALWAYS run `bun run pre-deploy` before calling deploy tool.
 
 ## 🤖 Agent Priorities
@@ -28,6 +30,7 @@ These files are ONLY placeholders to help boot the app. Do not keep their conten
 - **DO NOT preserve the template look** - create something unique that doesn't resemble the starter
 - Use semantic design tokens for all styling (no hard-coded colors)
 - Feel free to modify any aspect: pages, navigation, blocks, layouts, themes, etc.
+ - Rework the theme tokens (colors, radius, spacing) in `src/styles/themes.css` to align with the user's brand or the task context; the default theme is a placeholder.
 
 ### 1. 🧱 Reusable Blocks First
 - PREFER: Add/extend blocks in `src/blocks/` using shadcn/ui + Tailwind
@@ -142,6 +145,14 @@ To add a page:
   Avoid literal color utilities (e.g., `text-slate-500`) and `dark:`.
 
 ## 🎨 Theming & Design Tokens
+
+- IMPORTANT: The default theme is only a starting point. You should re-do the theme to fit the user's request or the task at hand. Do not keep the default palette, radii, or shadows if they don't match the project.
+
+- Theme redo checklist
+  - Define brand palette (primary, accent, background/foreground, muted, destructive)
+  - Adjust radii, spacing, and shadows to the product's feel (e.g., compact vs. roomy)
+  - Verify contrast and accessibility for all states (hover, focus, disabled)
+  - Update examples/blocks to use tokens (no hard-coded colors)
 
 - Tokens live in `src/styles/themes.css`. Themes are applied via `data-theme` on `<html>`.
 - Tailwind color tokens map to CSS variables in `src/index.css` using `@theme inline`.
