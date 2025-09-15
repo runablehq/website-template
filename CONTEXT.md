@@ -7,17 +7,16 @@ This repo is the base site template for user projects using:
 - Bun (package manager only)
 
 Agents should extend this starter by:
-1. Adding reusable UI blocks in `src/blocks/`
+1. Adding reusable UI components in `src/components/`
 2. Composing them into pages under `src/pages/`
 3. Using semantic design tokens for styling (no hard-coded colors)
 
 ## 🚩 Mandatory First Step
 
-Before doing anything else, you MUST rewrite the placeholder pages:
+Before doing anything else, you MUST rewrite the placeholder page:
 - `src/pages/Home.tsx`
-- `src/pages/About.tsx`
 
-These files are ONLY placeholders to help boot the app. Do not keep their content or styling. Replace them with your own design and content before building additional blocks or pages.
+This file is ONLY a placeholder to help boot the app. Do not keep its content or styling. Replace it with your own design and content before building additional components or pages.
 
 **IMPORTANT**: Default to PREVIEW, not deploy. Use `bun run preview` for validation. Only deploy when explicitly requested/approved. When deploying, ALWAYS run `bun run pre-deploy` first (to generate migrations), then proceed with deploy after review.
 
@@ -33,27 +32,27 @@ These files are ONLY placeholders to help boot the app. Do not keep their conten
 ## 🤖 Agent Priorities
 
 ### 0. 📝 Implementation Strategy
-- **THIS TEMPLATE IS JUST BOILERPLATE** - completely revamp the design to match user requirements. **MUST REWRITE `Home.tsx` and `About.tsx` BEFORE building anything else.**
+- **THIS TEMPLATE IS JUST BOILERPLATE** - completely revamp the design to match user requirements. **MUST REWRITE `Home.tsx` BEFORE building anything else.**
 - **DO NOT preserve the template look** - create something unique that doesn't resemble the starter
 - Use semantic design tokens for all styling (no hard-coded colors)
 - Feel free to modify any aspect: pages, navigation, blocks, layouts, themes, etc.
- - Rework the theme tokens (colors, radius, spacing) in `src/styles/themes.css` to align with the user's brand or the task context; the default theme is a placeholder.
+ - Rework the design tokens in `src/styles/global.css` to align with the user's brand or the task context; the default theme is a placeholder.
 
-### 1. 🧱 Reusable Blocks First
-- PREFER: Add/extend blocks in `src/blocks/` using shadcn/ui + Tailwind
+### 1. 🧩 Create Reusable Components First
+- PREFER: Add/extend components in `src/components/` using shadcn/ui + Tailwind
 - AVOID: Page-specific components unless they're small
-- WHY: Blocks are composable, testable, reusable
+- WHY: Components are composable, testable, reusable
 
-### 2. 🧩 Compose Pages from Blocks
-- PREFER: Keep pages in `src/pages/` minimal.
-- First step: **Replace `src/pages/Home.tsx` and `src/pages/About.tsx` with your own versions**.
+### 2. 📄 Structure Pages with Components
+- PREFER: Keep pages in `src/pages/` focused on layout and data flow
+- First step: **Replace `src/pages/Home.tsx` with your own version**
 - PASS DATA: via serializable props (strings, numbers, booleans)
-- WHY: Logic stays in reusable primitives
+- WHY: Logic stays in reusable components
 
 ### 3. 📝 Implementation Strategy
-1. Check if existing block can be configured
-2. If not, create new block in `src/blocks/`
-3. Wire block into relevant page(s)
+1. Check if existing component can be configured
+2. If not, create new component in `src/components/`
+3. Wire component into relevant page(s)
 4. Use consistent Tailwind styling with semantic tokens
 
 ### 4. 🚫 What NOT to do
@@ -65,14 +64,12 @@ These files are ONLY placeholders to help boot the app. Do not keep their conten
 ```
 src/
 ├── components/ui/     → shadcn/ui components
-├── components/        → App-level components (e.g., ThemeToggle)
-├── blocks/            → Reusable UI primitives
-├── pages/             → Pages composed from blocks
+├── components/        → App-level components
+├── pages/             → Page components
 ├── lib/               → Helpers and utilities
 ├── assets/            → Static assets (@assets/*)
-├── styles/            → Global styles and theme tokens
-├── theme/             → ThemeProvider + hooks
-└── constants.ts       → Website configurations
+├── styles/            → Global styles
+├── config.ts          → Website configurations
 
 worker/
 ├── index.ts           → Hono API endpoints
@@ -81,21 +78,21 @@ worker/
     └── schema.ts      → DB schema definitions
 ```
 
-## 🧱 Creating New Blocks
+## 🧩 Creating New Components
 
-1. Create file in `src/blocks/`
+1. Create file in `src/components/`
 2. Define props interface
 3. Export function component
 
 ```typescript
-// Example block structure
-interface BlockProps {
+// Example component structure
+interface ComponentProps {
   title: string;
   subtitle?: string;
   cta?: string;
 }
 
-export function BlockName({ title, subtitle, cta }: BlockProps) {
+export function ComponentName({ title, subtitle, cta }: ComponentProps) {
   return (
     <section className="py-20 text-center bg-accent text-accent-foreground">
       <h1 className="text-4xl font-bold">{title}</h1>
@@ -118,23 +115,20 @@ bun x shadcn@latest add <component>  # Add UI components
 bun x tsc --noEmit -p ./tsconfig.app.json # Typecheck app
 bun x tsc --noEmit -p ./tsconfig.worker.json # Typecheck worker
 bun x tsc --noEmit -p ./tsconfig.node.json # Typecheck node
-
-# Theming docs
-# See THEMING.md for adding/editing themes and tokens
 ```
 
 ## 🧭 Pages & Routing (SPA)
 
-- Pages: `src/pages/Home.tsx`, `src/pages/About.tsx`
+- Pages: `src/pages/Home.tsx`, `src/pages/sign-in.tsx`, `src/pages/sign-up.tsx`
 - Routing: `src/App.tsx` (React Router)
-- Navigation: Use `Navbar` block
+- Navigation: Create navigation components as needed
 
-> WARNING: `Home.tsx` and `About.tsx` are placeholders intended only to demonstrate routing and layout. **You must rewrite both files before adding new routes, blocks, or features.**
+> WARNING: `Home.tsx` is a placeholder intended only to demonstrate routing and layout. **You must rewrite this file before adding new routes or features.**
 
 To add a page:
 1. Create `src/pages/YourPage.tsx`
 2. Add `<Route>` in `App.tsx`
-3. Add link in `Navbar` block
+3. Add navigation links as needed
 
 ## 🖼️ Assets
 
@@ -154,25 +148,17 @@ To add a page:
 
 ## 🎨 Theming & Design Tokens
 
-- IMPORTANT: The default theme is only a starting point. You should re-do the theme to fit the user's request or the task at hand. Do not keep the default palette, radii, or shadows if they don't match the project.
+- IMPORTANT: The default theme is only a starting point. You should customize the CSS custom properties to fit the user's request or the task at hand. Do not keep the default palette, radii, or shadows if they don't match the project.
 
-- Theme redo checklist
+- Theme customization checklist
   - Define brand palette (primary, accent, background/foreground, muted, destructive)
   - Adjust radii, spacing, and shadows to the product's feel (e.g., compact vs. roomy)
   - Verify contrast and accessibility for all states (hover, focus, disabled)
-  - Update examples/blocks to use tokens (no hard-coded colors)
+  - Update examples/components to use tokens (no hard-coded colors)
 
-- Tokens live in `src/styles/themes.css`. Themes are applied via `data-theme` on `<html>`.
-- Tailwind color tokens map to CSS variables in `src/index.css` using `@theme inline`.
-- At runtime, `src/theme/ThemeProvider.tsx` sets `data-theme` and persists the choice.
-- `index.html` sets `data-theme` early to avoid FOUC.
-- Use `ThemeToggle` (`src/components/ThemeToggle.tsx`) to switch themes.
-
-Add a new theme
-
-1. Copy a theme block in `src/styles/themes.css` and rename the selector to `[data-theme="my-theme"]`.
-2. Adjust semantic variables (`--primary`, `--accent`, `--background`, etc.).
-3. Select via `useTheme().setTheme('my-theme')` or the ThemeToggle.
+- Design tokens live in `src/styles/global.css` as CSS custom properties
+- Tailwind color tokens map to CSS variables using `@theme inline`
+- To customize the theme, modify the CSS custom properties in `src/styles/global.css`
 
 ## 🔌 API Endpoints (Hono in `worker/`)
 
@@ -185,7 +171,7 @@ Authentication:
 Database:
 - D1 datastore
 - Bind as `D1` in `wrangler.jsonc`
-- Frontend: `src/blocks/Auth.tsx`
+- Authentication handled via Better Auth
 
 ## 📦 Database Migrations (Drizzle + D1)
 

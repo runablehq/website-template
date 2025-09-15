@@ -18,6 +18,13 @@ export default defineConfig({
     // Allow all inbound hostnames (e.g., tunneled domains like *.e2b.app)
     allowedHosts: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+      },
+    },
+  },
   preview: {
     // Apply the same host allowance for `vite preview`
     allowedHosts: true,
