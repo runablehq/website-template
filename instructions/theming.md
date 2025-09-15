@@ -27,4 +27,3 @@ Notes
 - Prefer semantic tokens over brand hues. Example: use `text-muted-foreground` instead of a gray class.
 - If you need transparency, use `/` opacity on the token class (e.g., `bg-accent/50`).
 - To ensure a consistent experience, do not use `dark:` classes. Themes switch by `data-theme` instead.
-
