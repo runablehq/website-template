@@ -4,14 +4,9 @@ import routes from "./routes/auth-routes";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>();
 
-app.use(
-  "*",
-  cors()
-);
+app.use("*", cors());
 
-app.get("/ping", (c) =>
-  c.json({ message: "ok", timestamp: Date.now() })
-);
+app.get("/ping", (c) => c.json({ message: "ok", timestamp: Date.now() }));
 
 app.route("/api", routes);
 

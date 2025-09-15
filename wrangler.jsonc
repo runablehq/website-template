@@ -20,7 +20,7 @@
   },
   // D1 binding example (create DB first, then fill in values)
   "d1_databases": [
-    { "binding": "D1", "database_name": "test-1", "database_id": "45d173f1-b7b5-4db5-9fc4-da0e3f6ea97f" }
+    { "binding": "D1", "database_name": "testing", "database_id": "5b09f2ee-bd0f-402a-aa24-ac5c84e07834" }
   ],
   /**
    * Smart Placement

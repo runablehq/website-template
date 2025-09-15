@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/d1";
-import * as schema from "./database/schema";
+import * as schema from "./db/schema";
 
 function createAuth(env?: Cloudflare.Env, cf?: IncomingRequestCfProperties) {
   // Use actual DB for runtime, empty object for CLI
