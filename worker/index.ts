@@ -6,6 +6,20 @@ import routes from "./routes/auth-routes";
 const app = new Hono<{ Bindings: Cloudflare.Env }>();
 
 app.use("*", cors());
+
+// Global error handler
+app.onError((err, c) => {
+  console.error("Global error handler:", err);
+  return c.json(
+    {
+      error: "Internal Server Error",
+      message: "An unexpected error occurred",
+      details: err.message,
+    },
+    500
+  );
+});
+
 app.get("/ping", (c) => c.json({ message: "ok", timestamp: Date.now() }));
 
 app.use("*", authMiddleware);
