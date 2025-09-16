@@ -1,12 +1,27 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { authenticatedOnly, authMiddleware } from "./middleware/auth";
 import routes from "./routes/auth-routes";
 
 const app = new Hono<{ Bindings: Cloudflare.Env }>();
 
 app.use("*", cors());
-
 app.get("/ping", (c) => c.json({ message: "ok", timestamp: Date.now() }));
+
+app.use("*", authMiddleware);
+
+// protected route example
+app.get("/protected", authenticatedOnly, (c) =>
+  c.json({ message: "ok", timestamp: Date.now() })
+);
+
+app.get("/me", authenticatedOnly, (c) => {
+  const user = c.get("user");
+  if (!user) {
+    return c.json({ message: "You are not authenticated" }, 401);
+  }
+  return c.json(user);
+});
 
 app.route("/api", routes);
 
