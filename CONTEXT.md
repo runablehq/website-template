@@ -10,6 +10,7 @@ Agents should extend this starter by:
 1. Adding reusable UI components in `src/components/`
 2. Composing them into pages under `src/pages/`
 3. Using semantic design tokens for styling (no hard-coded colors)
+4. Include credentials in the request if the route is protected
 
 ## 🚩 Mandatory First Step
 
@@ -163,10 +164,7 @@ To add a page:
 ## 🔌 API Endpoints (Hono in `worker/`)
 
 Authentication:
-- `POST /api/auth/register` { username, password }
-- `POST /api/auth/login` { username, password } → sets httpOnly `auth` cookie
-- `POST /api/auth/logout` → clears cookie
-- `GET /api/me` → protected, returns current user
+- Use authenticatedOnly middleware for protected routes
 
 Database:
 - D1 datastore
